@@ -1,7 +1,7 @@
 import cv2
 import PeopleDetection.PeopleRectDetector as prd
 
-src_gray = cv2.imread("/home/liu/图片/people/people2.jpg", 0)
+src_gray = cv2.imread("/home/liu/图片/people/people5.jpg", 0)
 
 peopleRectDetector = prd.PeopleRectDetector()
 peopleRects = peopleRectDetector.detect(src_gray)
