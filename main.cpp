@@ -26,7 +26,14 @@ int main()
         
         
         //对每一个行人进行双目测距
-        float distance = binDistMeasure(50,frame1,cv::noArray(),frame2,cv::noArray());
+        cv::Rect rect1(50,50,100,60);
+        cv::Mat mask1(frame1.size(),CV_8U);
+        mask1 = cv::Scalar(0);
+        cv::rectangle(mask1,rect1,cv::Scalar(255),-1);
+        float distance = binDistMeasure(50,frame1,mask1,frame2,mask1);
+        
+        if(cv::waitKey(1) == 'q')
+            break;
     }
     
     return 0;

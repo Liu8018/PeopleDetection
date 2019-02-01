@@ -120,6 +120,9 @@ void matchByHorizontalEpilines(const std::vector<cv::KeyPoint> &keyPoints1, cons
                                const cv::Mat &descriptors1, const cv::Mat &descriptors2, 
                                std::vector<cv::Point2f> &leftPoints, std::vector<cv::Point2f> &rightPoints)
 {
+    if(descriptors1.empty() || descriptors2.empty())
+        return;
+    
     //匹配
     cv::BFMatcher matcher(cv::NORM_HAMMING);
     std::vector<cv::DMatch> matches;
@@ -173,12 +176,19 @@ float binDistMeasure(int nfeatures,
     cv::Ptr<cv::Feature2D> feature = cv::ORB::create(nfeatures,1,1);
     feature->detectAndCompute(frame1,mask1,keyPoints1,descriptors1);
     feature->detectAndCompute(frame2,mask2,keyPoints2,descriptors2);
-    
+
     //水平极线约束匹配
     std::vector<cv::Point2f> leftPoints;
     std::vector<cv::Point2f> rightPoints;
     matchByHorizontalEpilines(keyPoints1,keyPoints2,descriptors1,descriptors2,leftPoints,rightPoints);
     
+    //test
+    cv::Mat testMatchImg;
+    vizMatches(frame1,frame2,leftPoints,rightPoints,testMatchImg);
+    cv::namedWindow("testMatchImg",0);
+    cv::imshow("testMatchImg",testMatchImg);
+    
     //计算距离
     
+    return 0.0;
 }
