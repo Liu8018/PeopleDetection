@@ -7,7 +7,8 @@ SOURCES += main.cpp \
     functions.cpp
 
 HEADERS += \
-    functions.h
+    functions.h \
+    binPeopleDetector.h
 
 INCLUDEPATH += /usr/local/include
 

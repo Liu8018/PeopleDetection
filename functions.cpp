@@ -192,3 +192,42 @@ float binDistMeasure(int nfeatures,
     
     return 0.0;
 }
+
+void calcHomography(const std::vector<cv::Point> &pts1, const std::vector<cv::Point> &pts2, 
+                    cv::Size imgSize, std::string outputPath)
+{
+    //计算基础矩阵
+    cv::Mat fundamentalMat = cv::findFundamentalMat(pts1,pts2);
+    
+    //计算单应变换矫正量
+    cv::Mat h1,h2;
+    cv::stereoRectifyUncalibrated(pts1,pts2,fundamentalMat,imgSize,h1,h2);
+    
+    //输出
+    cv::FileStorage fswrite(outputPath,cv::FileStorage::WRITE);
+    fswrite<<"h1"<<h1;
+    fswrite<<"h2"<<h2;
+    fswrite.release();
+}
+
+void read_hRect(cv::Mat &h1, cv::Mat &h2, std::string hPath)
+{
+    cv::FileStorage fsread(hPath,cv::FileStorage::READ);
+    fsread["h1"]>>h1;
+    fsread["h2"]>>h2;
+    fsread.release();
+};
+
+void OpenCV_binDistMeasure(const cv::Mat &frame1,const cv::Mat &frame2,
+                           const cv::Mat &h1, const cv::Mat &h2,
+                           cv::Mat &disparity)
+{
+    cv::Mat rectified1,rectified2;
+    cv::warpPerspective(frame1,rectified1,h1,frame1.size());
+    cv::warpPerspective(frame2,rectified2,h2,frame2.size());
+    
+    cv::Ptr<cv::StereoMatcher> pStereo = cv::StereoSGBM::create(0,32,5);
+    pStereo->compute(frame1,frame2,disparity);
+    
+    //disparity *= 8;
+}

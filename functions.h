@@ -39,3 +39,14 @@ void vizMatches(const cv::Mat &img1,
 float binDistMeasure(int nfeatures,
                      const cv::Mat &frame1,const cv::Mat &mask1,
                      const cv::Mat &frame2,const cv::Mat &mask2);
+
+//计算单应变换矫正量
+void calcHomography(const std::vector<cv::Point> &pts1, const std::vector<cv::Point> &pts2,
+                    cv::Size imgSize, std::string outputPath);
+void read_hRect(cv::Mat &h1, cv::Mat &h2, std::string hPath);
+
+//OpenCV双目测距
+void OpenCV_binDistMeasure(const cv::Mat &frame1,const cv::Mat &frame2,
+                           const cv::Mat &h1, const cv::Mat &h2,
+                           cv::Mat &disparity);
+
